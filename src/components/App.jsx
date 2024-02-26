@@ -1,16 +1,33 @@
+import { useState } from 'react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Searchbar from './Searchbar';
+import ImageGallery from './ImageGallery/ImageGallery';
+import s from './App.module.css';
+
 export const App = () => {
+  const [query, setQuery] = useState('');
+
+  const changeQuery = query => {
+    setQuery(query);
+  };
+
   return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101'
-      }}
-    >
-      React homework template
+    <div className={s.App}>
+      <Searchbar onSubmit={changeQuery} />
+      <ImageGallery query={query} />
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </div>
   );
 };
