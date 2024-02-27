@@ -6,6 +6,7 @@ import NotFound from 'components/NotFound';
 import Loader from 'components/Loader';
 import Button from 'components/Button';
 import Modal from 'components/Modal';
+import ToTop from 'components/ToTop';
 
 const ImageGallery = props => {
   const [query, setQuery] = useState('');
@@ -60,6 +61,10 @@ const ImageGallery = props => {
     setIsModal(prev => !prev);
   };
 
+  const onTopScroll = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const totalPage = Math.ceil(totalHits / perPage);
 
   return (
@@ -67,27 +72,30 @@ const ImageGallery = props => {
       {error ? (
         <NotFound error={error} />
       ) : (
-        <div className={s.ImageGallery}>
-          {images.length > 0 &&
-            images.map((item, idx) => (
-              <ImageGalleryItem
-                key={idx}
-                img={item.webformatURL}
-                setlargeImage={setLargeImg}
-                alt={item.tags}
-                id={item.id}
-                showModal={toggleMOdal}
-                data={item.largeImageURL}
-              />
-            ))}
-          {isModal && (
-            <Modal getLargeImg={largeImage} closeModal={toggleMOdal} />
+        <>
+          <div className={s.ImageGallery}>
+            {images.length > 0 &&
+              images.map((item, idx) => (
+                <ImageGalleryItem
+                  key={idx}
+                  img={item.webformatURL}
+                  setlargeImage={setLargeImg}
+                  alt={item.tags}
+                  id={item.id}
+                  showModal={toggleMOdal}
+                  data={item.largeImageURL}
+                />
+              ))}
+            {isModal && (
+              <Modal getLargeImg={largeImage} closeModal={toggleMOdal} />
+            )}
+          </div>
+          {page === 2 && <ToTop onClick={onTopScroll} />}
+          {isLoading && <Loader />}
+          {totalHits > perPage && totalPage > page && (
+            <Button changePage={onChangePage} />
           )}
-        </div>
-      )}
-      {isLoading && <Loader />}
-      {totalHits > perPage && totalPage > page && (
-        <Button changePage={onChangePage} />
+        </>
       )}
     </div>
   );
